@@ -1,0 +1,11 @@
+# trainmate-test
+target/
+*.log
+logs/
+.idea/
+*.iml
+test-output/
+reports/
+screenshots/
+.DS_Store
+Thumbs.db
