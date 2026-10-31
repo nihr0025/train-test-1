@@ -40,11 +40,15 @@ TrainerWorkflowTest extends BaseTest {
         loginAsTrainer();
         // Attempt direct navigation to coach or admin routes
         driver.get(ConfigReader.getAppUrl() + "admin/trainers");
-        boolean accessDenied = driver.getCurrentUrl().contains("/login") || !driver.getCurrentUrl().contains("/admin/trainers");
+        boolean accessDenied = driver.getCurrentUrl().contains("/login") ||
+                !driver.getCurrentUrl().contains("/admin/trainers") ||
+                driver.findElements(org.openqa.selenium.By.xpath("//h1[contains(., 'Trainers Management')]")).isEmpty();
         Assert.assertTrue(accessDenied, "Direct navigation to protected Coach/Admin routes is denied");
 
         driver.get(ConfigReader.getAppUrl() + "coach/cohorts");
-        boolean coachDenied = driver.getCurrentUrl().contains("/login") || !driver.getCurrentUrl().contains("/coach/cohorts");
+        boolean coachDenied = driver.getCurrentUrl().contains("/login") ||
+                !driver.getCurrentUrl().contains("/coach/cohorts") ||
+                driver.findElements(org.openqa.selenium.By.xpath("//h1[contains(., 'My Managed Cohorts')]")).isEmpty();
         Assert.assertTrue(coachDenied, "Direct navigation to protected Coach route is denied");
     }
 

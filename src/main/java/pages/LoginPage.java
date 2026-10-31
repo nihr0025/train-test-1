@@ -4,6 +4,7 @@ import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.LoggerUtils;
@@ -56,10 +57,14 @@ public class LoginPage extends BasePage {
         enterPassword(password);
         clickSignIn();
 
+        // Safely dismiss any unexpected native dialogs or password prompts
+        dismissBrowserWarningsIfAny();
+
         // Wait up to explicitTimeout for either dashboard redirection or an error alert
         try {
             WebDriverWait authWait = new WebDriverWait(driver, Duration.ofSeconds(explicitTimeout));
             authWait.until(d -> {
+                dismissBrowserWarningsIfAny();
                 String currentUrl = d.getCurrentUrl();
                 boolean redirectedToDashboard = currentUrl.contains("/coach") ||
                         currentUrl.contains("/trainer") ||
@@ -77,10 +82,41 @@ public class LoginPage extends BasePage {
     }
 
     /**
+     * Safely dismisses any unexpected browser warnings, password breach alerts, or dialog overlays
+     * without changing account credentials or interrupting automation.
+     */
+    public void dismissBrowserWarningsIfAny() {
+        // 1. Check for native browser alert
+        try {
+            driver.switchTo().alert().accept();
+            LoggerUtils.info(getClass(), "Dismissed unexpected native browser alert.");
+        } catch (Exception ignored) {}
+
+        // 2. Check for any web-based password manager or warning dialog OK/Dismiss button
+        try {
+            java.util.List<WebElement> warningBtns = driver.findElements(By.xpath(
+                    "//div[contains(@class, 'modal') or contains(@class, 'alert') or contains(@class, 'dialog') or contains(@class, 'toast')]" +
+                    "//button[translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='ok' " +
+                    "or translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='dismiss' " +
+                    "or translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='close' " +
+                    "or contains(@class, 'btn-close')]"
+            ));
+            for (WebElement btn : warningBtns) {
+                if (btn.isDisplayed()) {
+                    clickViaJs(btn);
+                    LoggerUtils.info(getClass(), "Dismissed browser warning dialog button: " + btn.getText());
+                    break;
+                }
+            }
+        } catch (Exception ignored) {}
+    }
+
+    /**
      * Logs in and verifies that the destination role dashboard has loaded cleanly.
      */
     public void loginAndVerifyDashboard(String username, String password) {
         login(username, password);
+        dismissBrowserWarningsIfAny();
         waitForVisibility(dashboardIndicator, explicitTimeout);
     }
 

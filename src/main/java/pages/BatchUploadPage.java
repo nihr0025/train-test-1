@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class BatchUploadPage extends BasePage {
 
-    private final By pageTitle = By.xpath("//h1[contains(text(), 'Add & Allocate Cohorts')] | //h1[contains(@class, 'page-title')]");
+    private final By pageTitle = By.xpath("//h1[contains(text(), 'Add & Allocate Cohorts')]");
     private final By manualTabBtn = By.xpath("//button[contains(., 'Create Single Cohort')]");
     private final By batchTabBtn = By.xpath("//button[contains(., 'Batch Upload')]");
     private final By fileInput = By.cssSelector("input[type='file']");

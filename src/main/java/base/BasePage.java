@@ -131,6 +131,22 @@ public abstract class BasePage {
     }
 
     /**
+     * Resilient navigation click for Angular router links.
+     * Ensures element is clickable, scrolls it into center view, and triggers clickViaJs
+     * to guarantee Angular RouterLink zone change detection and route transitions.
+     */
+    protected void clickNav(By locator) {
+        try {
+            WebElement element = waitForClickable(locator);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+            clickViaJs(element);
+        } catch (Exception e) {
+            captureDiagnostics(locator, "clickNav", e);
+            throw e;
+        }
+    }
+
+    /**
      * Safely clear an input field ensuring it is visible and interactable,
      * then dispatches Angular input/change events to update two-way [(ngModel)] bindings.
      */

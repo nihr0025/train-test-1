@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class TrainerManagementPage extends BasePage {
 
-    private final By pageTitle = By.xpath("//h1[contains(@class, 'page-title')]//span[contains(text(), 'Trainers Management')] | //h1[contains(@class, 'page-title')]");
+    private final By pageTitle = By.xpath("//h1[contains(@class, 'page-title') and contains(., 'Trainers Management')] | //h1[contains(., 'Trainers Management')]");
     private final By registerTrainerBtn = By.xpath("//button[contains(., 'Register New Trainer')]");
     // Live placeholder: "Search by trainer name, skill, or service line..."
     private final By searchInput = By.cssSelector("input[placeholder*='Search by trainer name'], .content-card input[type='text']");
@@ -54,7 +54,7 @@ public class TrainerManagementPage extends BasePage {
     }
 
     public void openRegisterTrainerModal() {
-        click(registerTrainerBtn);
+        clickNav(registerTrainerBtn);
         waitForVisibility(formModal);
     }
 
@@ -133,7 +133,7 @@ public class TrainerManagementPage extends BasePage {
         } else {
             editBtn = By.xpath("//tr[.//td[contains(text(), '" + trainerName + "')]]//button[contains(@class, 'btn-edit')]");
         }
-        click(editBtn);
+        clickNav(editBtn);
         waitForVisibility(formModal);
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class TrainerMailboxPage extends BasePage {
 
-    private final By pageTitle = By.xpath("//h1[contains(@class, 'page-title')]//span[contains(text(), 'Mailbox')] | //h1[contains(@class, 'page-title')]");
+    private final By pageTitle = By.xpath("//h1[contains(@class, 'page-title') and contains(., 'Mailbox')] | //h1[contains(., 'Mailbox')]");
     private final By messageCards = By.cssSelector(".content-card .p-3.border-bottom, .content-card .list-group-item");
     private final By markAllReadBtn = By.xpath("//button[contains(., 'Mark All as Read')]");
     private final By emptyMailboxMsg = By.xpath("//div[contains(@class, 'text-center')]//h6[contains(text(), 'mailbox is empty') or contains(text(), 'No notifications')]");

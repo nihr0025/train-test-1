@@ -19,7 +19,7 @@ import java.util.List;
 public class AdminCohortsPage extends BasePage {
 
     // Locators verified from live app bundle (chunk-LNZ2M7KH.js)
-    private final By pageTitle = By.xpath("//h1[contains(@class, 'page-title')]//span[contains(text(), 'All System Cohorts')] | //h1[contains(@class, 'page-title')]");
+    private final By pageTitle = By.xpath("//h1[contains(@class, 'page-title') and contains(., 'All System Cohorts')] | //h1[contains(., 'All System Cohorts')]");
     // Live placeholder: "Search code, skill, coach, trainer..."
     private final By searchInput = By.cssSelector("input[placeholder*='Search code'], input[placeholder*='Search code, skill'], .content-card input[type='text']");
     private final By statusFilterSelect = By.xpath("//select[contains(@class, 'form-select')][.//option[@value='ASSIGNED'] or .//option[text()='All Statuses']]");
@@ -115,7 +115,7 @@ public class AdminCohortsPage extends BasePage {
         } else {
             reassignBtn = By.xpath("//tr[.//td[contains(text(), '" + cohortCode + "')]]//button[contains(@class, 'btn-reassign') or .//i[contains(@class, 'bi-arrow-left-right')]]");
         }
-        click(reassignBtn);
+        clickNav(reassignBtn);
         waitForVisibility(reassignModal);
     }
 

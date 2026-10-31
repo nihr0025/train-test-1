@@ -55,8 +55,8 @@ public class AdminDashboardPage extends BasePage {
      */
     public AdminCohortsPage navigateToCohorts() {
         LoggerUtils.info(getClass(), "Navigating to Admin Cohorts page via UI...");
-        By navTarget = isElementDisplayed(manageCohortsBtn) ? manageCohortsBtn : sidebarAllCohortsLink;
-        click(navTarget);
+        By navTarget = By.xpath("//a[contains(@href, '/admin/cohorts') and contains(., 'All Cohorts')] | //aside//a[contains(@href, '/admin/cohorts')] | //a[contains(@href, '/admin/cohorts')]");
+        clickNav(navTarget);
         AdminCohortsPage cohortsPage = new AdminCohortsPage(driver);
         cohortsPage.waitUntilLoaded();
         return cohortsPage;
@@ -68,8 +68,8 @@ public class AdminDashboardPage extends BasePage {
      */
     public TrainerManagementPage navigateToTrainers() {
         LoggerUtils.info(getClass(), "Navigating to Trainer Management page via UI...");
-        By navTarget = isElementDisplayed(inspectTrainersBtn) ? inspectTrainersBtn : sidebarTrainersPoolLink;
-        click(navTarget);
+        By navTarget = By.xpath("//a[contains(@href, '/admin/trainers') and contains(., 'Trainers Pool')] | //aside//a[contains(@href, '/admin/trainers')] | //a[contains(@href, '/admin/trainers')]");
+        clickNav(navTarget);
         TrainerManagementPage trainersPage = new TrainerManagementPage(driver);
         trainersPage.waitUntilLoaded();
         return trainersPage;

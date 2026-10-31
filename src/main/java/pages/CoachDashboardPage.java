@@ -64,8 +64,8 @@ public class CoachDashboardPage extends BasePage {
      */
     public CohortPage navigateToCohorts() {
         LoggerUtils.info(getClass(), "Navigating to Coach My Cohorts page via UI...");
-        By navTarget = isElementDisplayed(myCohortsViewAllBtn) ? myCohortsViewAllBtn : sidebarMyCohortsLink;
-        click(navTarget);
+        By navTarget = By.xpath("//a[contains(@href, '/coach/cohorts') and contains(., 'My Cohorts')] | //aside//a[contains(@href, '/coach/cohorts')] | //a[contains(@href, '/coach/cohorts')]");
+        clickNav(navTarget);
         CohortPage cohortPage = new CohortPage(driver);
         cohortPage.waitUntilLoaded();
         return cohortPage;
@@ -76,8 +76,8 @@ public class CoachDashboardPage extends BasePage {
      */
     public BatchUploadPage navigateToUpload() {
         LoggerUtils.info(getClass(), "Navigating to Batch Upload page via UI...");
-        By navTarget = isElementDisplayed(uploadBatchBtn) ? uploadBatchBtn : sidebarAddCohortLink;
-        click(navTarget);
+        By navTarget = By.xpath("//a[contains(@href, '/coach/upload') and contains(., 'Add Cohort')] | //aside//a[contains(@href, '/coach/upload')] | //a[contains(@href, '/coach/upload')]");
+        clickNav(navTarget);
         BatchUploadPage uploadPage = new BatchUploadPage(driver);
         uploadPage.waitUntilLoaded();
         return uploadPage;
@@ -111,7 +111,19 @@ public class CoachDashboardPage extends BasePage {
         }
     }
 
+    private final By popupDetailsModalClose = By.xpath("//app-cohort-details-modal//button[contains(., 'Close') or contains(@class, 'btn-close') or @aria-label='Close']");
+
+    public void closeActiveDetailsModalIfOpen() {
+        try {
+            if (isElementDisplayed(popupDetailsModalClose)) {
+                clickViaJs(driver.findElement(popupDetailsModalClose));
+                Thread.sleep(500);
+            }
+        } catch (Exception ignored) {}
+    }
+
     public void openCreateCohortModal() {
+        closeActiveDetailsModalIfOpen();
         click(createCohortBtn);
         waitForVisibility(modal);
     }

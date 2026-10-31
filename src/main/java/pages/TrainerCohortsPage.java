@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class TrainerCohortsPage extends BasePage {
 
-    private final By pageTitle = By.xpath("//h1[contains(@class, 'page-title')]//span[contains(text(), 'My Assigned Cohorts')] | //h1[contains(@class, 'page-title')]");
+    private final By pageTitle = By.xpath("//h1[contains(@class, 'page-title') and contains(., 'My Assigned Cohorts')] | //h1[contains(., 'My Assigned Cohorts')]");
     // Live placeholder: "Search by cohort code or skill..."
     private final By searchInput = By.cssSelector("input[placeholder*='Search by cohort code'], .content-card input[type='text']");
     private final By statusFilterSelect = By.xpath("//select[contains(@class, 'form-select')][.//option[@value='ASSIGNED'] or .//option[text()='All Statuses']]");

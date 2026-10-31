@@ -20,9 +20,9 @@ public class TrainerDashboardPage extends BasePage {
     private final By mailsStat = By.xpath("//div[contains(@class, 'stat-card')][.//div[text()='Mails & Alerts']]//div[contains(@class, 'stat-value')]");
     private final By assignedCohortsTableRows = By.cssSelector("table tbody tr");
     private final By emptyStateRow = By.xpath("//table//tr//td[contains(., 'No cohorts have been assigned') or contains(., 'No cohorts')]");
-    private final By viewAllCohortsLink = By.xpath("//a[contains(@href, '/trainer/cohorts')]");
-    private final By sidebarMyCohortsLink = By.xpath("//aside//a[contains(@href, '/trainer/cohorts') or contains(., 'My Cohorts')]");
-    private final By mailboxNavLink = By.xpath("//a[contains(@href, '/trainer/mail') or contains(., 'Mailbox')]");
+    private final By viewAllCohortsLink = By.xpath("//a[contains(@href, '/trainer/cohorts') and contains(text(), 'View All')]");
+    private final By sidebarMyCohortsLink = By.xpath("//a[contains(@href, '/trainer/cohorts') and contains(., 'My Cohorts')] | //aside//a[contains(., 'My Cohorts')]");
+    private final By mailboxNavLink = By.xpath("//a[contains(@href, '/trainer/mail') and contains(., 'Mailbox')] | //aside//a[contains(., 'Mailbox')]");
     private final By coachTabsHidden = By.xpath("//a[contains(@href, '/coach')]");
     private final By adminTabsHidden = By.xpath("//a[contains(@href, '/admin')]");
 
@@ -77,8 +77,8 @@ public class TrainerDashboardPage extends BasePage {
 
     public TrainerCohortsPage navigateToCohorts() {
         LoggerUtils.info(getClass(), "Navigating to Trainer My Cohorts via UI...");
-        By navTarget = isElementDisplayed(viewAllCohortsLink) ? viewAllCohortsLink : sidebarMyCohortsLink;
-        click(navTarget);
+        By navTarget = isElementDisplayed(sidebarMyCohortsLink) ? sidebarMyCohortsLink : viewAllCohortsLink;
+        clickNav(navTarget);
         TrainerCohortsPage cohortsPage = new TrainerCohortsPage(driver);
         cohortsPage.waitUntilLoaded();
         return cohortsPage;
@@ -86,7 +86,7 @@ public class TrainerDashboardPage extends BasePage {
 
     public TrainerMailboxPage navigateToMailbox() {
         LoggerUtils.info(getClass(), "Navigating to Trainer Mailbox via UI...");
-        click(mailboxNavLink);
+        clickNav(mailboxNavLink);
         TrainerMailboxPage mailboxPage = new TrainerMailboxPage(driver);
         mailboxPage.waitUntilLoaded();
         return mailboxPage;
